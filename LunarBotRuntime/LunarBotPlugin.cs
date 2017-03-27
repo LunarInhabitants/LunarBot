@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace LunarBotRuntime
 {
-    [Serializable]
-    public abstract class LunarBotPlugin : MarshalByRefObject
+    public abstract class LunarBotPlugin
     {
         public string Name { get; protected set; }
         public string Description { get; protected set; }

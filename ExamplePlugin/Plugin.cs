@@ -6,12 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-[Serializable]
 public class Example : LunarBotPlugin
 {
     public Example()
     {
-        Name = "Test Plugin that was reloaded";
+        Name = "Test Plugin";
         Description = "This is a test of the plugin system";
         Author = "Daniel Masterson";
     }
@@ -20,7 +19,7 @@ public class Example : LunarBotPlugin
     {
         CommandManager.AddCommand("plugintest", async (e) =>
         {
-            e.Channel.SendMessage("This plugin dun did werk and was reloaded");
+            await e.Channel.SendMessage("This plugin works!");
         });
     }
 

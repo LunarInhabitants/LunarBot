@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace LunarBotRuntime
 {
-    [Serializable]
-    public class DiscordCommand : MarshalByRefObject
+    public class DiscordCommand
     {
         public class CommandArgument
         {
