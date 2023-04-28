@@ -1,6 +1,8 @@
-import { Client } from "discord.js";
-import { RegisterUrlCleaningListener } from "./url-cleaning-listener.js";
+import type { DiscordListener } from "src/types.js";
+import { UrlCleaningListener } from "./url-cleaning-listener.js";
+import { CommandListener } from "./command-listener.js";
 
-export default function RegisterListeners(client: Client) {
-    RegisterUrlCleaningListener(client);
-}
+export const Listeners: DiscordListener[] = [
+    CommandListener,
+    UrlCleaningListener
+];
