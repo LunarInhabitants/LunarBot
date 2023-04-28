@@ -1,0 +1,27 @@
+{
+  "name": "lunarbot",
+  "version": "0.0.1",
+  "description": "A Discord bot created by the Lunar Inhabitants",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.9.0",
+    "dotenv": "^16.0.3",
+    "get-urls": "^11.0.0",
+    "tidy-url": "^1.6.15"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.2",
+    "eslint": "^8.39.0",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4"
+  }
+}
