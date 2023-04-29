@@ -1,6 +1,6 @@
 import type { Client, ChatInputApplicationCommandData, CommandInteraction } from "discord.js";
 
-export interface DiscordListener {
+export interface DiscordEventListener {
     displayName: string;
     setup: (client: Client) => void;
 } 

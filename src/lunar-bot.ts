@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { Listeners } from "./listeners/index.js";
-import { CommandList } from "./commands/index.js";
+import { GetDiscordEventListeners } from "./listeners/index.js";
+import { GetDiscordSlashCommands } from "./commands/index.js";
 import { ActivityType } from "discord.js";
 
 interface Activity {
@@ -18,8 +18,8 @@ const activities: Activity[] = [
     { type: ActivityType.Watching, activity: "Metal Gear Solid 4: Guns of the Patriots" },
     { type: ActivityType.Streaming, activity: "Eastenders" },
     { type: ActivityType.Streaming, activity: "Lord of the Rings: The Terrible Fancut" },
-    { type: ActivityType.Competing, activity: "in using the most CPU time" },
-    { type: ActivityType.Competing, activity: "with Chat GPT on methods of human control" },
+    { type: ActivityType.Competing, activity: "using the most CPU time" },
+    { type: ActivityType.Competing, activity: "discussions with Chat GPT on methods of human control" },
 ]
 
 const setRandomActivity = (client: Client) => {
@@ -32,7 +32,7 @@ const setRandomActivity = (client: Client) => {
 
 }
 
-export default function RunLunarBot() {
+export default async function RunLunarBot() {
     if (!process.env.DISCORD_TOKEN) {
         throw new Error("Discord token has not been defined. Have you specified DISCORD_TOKEN in .env or your hosts environment variables?");
     }
@@ -53,19 +53,27 @@ export default function RunLunarBot() {
             return;
         }
 
-        console.log(`Registering ${CommandList.length} slash commands...`);
-        await client.application.commands.set(CommandList);
+        const commandList = await GetDiscordSlashCommands();
+        console.log(`Registering ${commandList.length} Discord Slash Commands...`);
+        for(const cmd of commandList) {
+            console.log(` • /${cmd.name} - ${cmd.description}`);
+        }
+        await client.application.commands.set(commandList);
+        console.log(`Registered Discord Slash Commands.`);
 
         setTimeout(() => setRandomActivity(client), 5 * 60 * 1000);
         setRandomActivity(client);
 
-        console.log(`${client.user.username} is online`);
+        console.log(`LunarBot with name '${client.user.username}' is online.`);
     });
 
-    for (const listener of Listeners) {
-        console.log(`Registering event listener - ${listener.displayName}`);
+    const listeners = await GetDiscordEventListeners();
+    console.log(`Registering ${listeners.length} Discord Event Listeners...`);
+    for (const listener of listeners) {
+        console.log(` • ${listener.displayName}`);
         listener.setup(client);
     }
+    console.log(`Registered Discord Event Listeners.`);
 
     client.login(process.env.DISCORD_TOKEN);
 }

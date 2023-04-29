@@ -1,4 +1,4 @@
-import type { DiscordListener } from "src/types.js";
+import type { DiscordEventListener } from "src/types.js";
 import { APIEmbedField, Client, EmbedBuilder, Events } from "discord.js";
 import getUrls from "get-urls";
 import { TidyURL } from 'tidy-url';
@@ -7,7 +7,7 @@ import { IData } from "tidy-url/lib/interface.js";
 TidyURL.allow_redirects = true;
 TidyURL.allow_amp = false;
 
-export const UrlCleaningListener: DiscordListener = {
+const listener: DiscordEventListener = {
     displayName: "URL Cleaner",
     setup: (client: Client) => {
         client.on(Events.MessageCreate, async (msg) => {
@@ -54,3 +54,5 @@ export const UrlCleaningListener: DiscordListener = {
         });
     }
 };
+
+export default listener;

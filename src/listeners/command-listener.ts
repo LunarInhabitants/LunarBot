@@ -1,13 +1,14 @@
-import type { DiscordListener } from "src/types.js";
+import type { DiscordEventListener } from "src/types.js";
 import { Client, Events } from "discord.js";
-import { CommandList } from "../commands/index.js";
+import { GetDiscordSlashCommands } from "../commands/index.js";
 
-export const CommandListener: DiscordListener = {
+const listener: DiscordEventListener = {
     displayName: "Slash Command Handler",
     setup: (client: Client) => {
         client.on(Events.InteractionCreate, async (interaction) => {
             if (interaction.isCommand() || interaction.isContextMenuCommand()) {
-                const cmd = CommandList.find(c => c.name === interaction.commandName);
+                const commandList = await GetDiscordSlashCommands();
+                const cmd = commandList.find(c => c.name === interaction.commandName);
 
                 if (!cmd) {
                     interaction.followUp({
@@ -23,3 +24,5 @@ export const CommandListener: DiscordListener = {
         });
     }
 };
+
+export default listener;
