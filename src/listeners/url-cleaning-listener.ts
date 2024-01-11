@@ -1,5 +1,5 @@
 import type { DiscordEventListener } from "src/types.js";
-import { APIEmbedField, Client, EmbedBuilder, Events, GuildMember, hideLinkEmbed, Message } from "discord.js";
+import { APIEmbedField, Client, EmbedBuilder, Events, GuildMember, hideLinkEmbed, hyperlink, Message } from "discord.js";
 import getUrls from "get-urls";
 import { TidyURL } from 'tidy-url';
 import { IData as CleanedUrlData } from "tidy-url/lib/interface.js";
@@ -66,15 +66,19 @@ const listener: DiscordEventListener = {
             if(cleanedUrls.length > 1) {
                 let urlsList = "";
                 for(const cleanedUrl of cleanedUrls) {
-                    urlsList += `- ${hideLinkEmbed(cleanedUrl.url)}\n`;
+                    urlsList += `- ${formatLink(cleanedUrl.url)}\n`;
                 }
                 msg.channel.send(`**${guildMember?.nickname ?? msg.author.username}** sent the following links that I've cleaned up:\n${urlsList}`);
             } else {
-                msg.channel.send(`**${guildMember?.nickname ?? msg.author.username}** sent the following link that I've cleaned up:\n${hideLinkEmbed(cleanedUrls[0].url)}`);
+                msg.channel.send(`**${guildMember?.nickname ?? msg.author.username}** sent the following link that I've cleaned up:\n${formatLink(cleanedUrls[0].url)}`);
             }       
         });
     }
-};
+}
+
+function formatLink(url: string) {
+    return `${url} | ${hyperlink("[Bypass Paywall]", hideLinkEmbed(`https://12ft.io/${url}`))}`
+}
 
 async function createEmbed(msg: Message<boolean>, guildMember: GuildMember | null,  dirtyUrls: string[], cleanedUrls: CleanedUrlData[]) {
     const embed = new EmbedBuilder()
