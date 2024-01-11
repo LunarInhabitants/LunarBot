@@ -1,5 +1,5 @@
 import type { DiscordEventListener } from "src/types.js";
-import { APIEmbedField, Client, EmbedBuilder, Events, GuildMember, Message } from "discord.js";
+import { APIEmbedField, Client, EmbedBuilder, Events, GuildMember, hideLinkEmbed, Message } from "discord.js";
 import getUrls from "get-urls";
 import { TidyURL } from 'tidy-url';
 import { IData as CleanedUrlData } from "tidy-url/lib/interface.js";
@@ -58,13 +58,25 @@ const listener: DiscordEventListener = {
                 guildMember = await msg.guild.members.fetch(msg.author);
             }
 
-            const embed = await createEmbed(msg, guildMember, dirtyUrls, cleanedUrls);
-            msg.channel.send({ embeds: [embed] })
+            // Fancy embeds
+            //const embed = await createEmbed(msg, guildMember, dirtyUrls, cleanedUrls);
+            //msg.channel.send({ embeds: [embed] })
+
+            // Simple message
+            if(cleanedUrls.length > 1) {
+                let urlsList = "";
+                for(const cleanedUrl of cleanedUrls) {
+                    urlsList += `- ${hideLinkEmbed(cleanedUrl.url)}\n`;
+                }
+                msg.channel.send(`**${guildMember?.nickname ?? msg.author.username}** sent the following links that I've cleaned up:\n${urlsList}`);
+            } else {
+                msg.channel.send(`**${guildMember?.nickname ?? msg.author.username}** sent the following link that I've cleaned up:\n${hideLinkEmbed(cleanedUrls[0].url)}`);
+            }       
         });
     }
 };
 
-async function createEmbed(msg: Message<boolean>,guildMember: GuildMember | null,  dirtyUrls: string[], cleanedUrls: CleanedUrlData[]) {
+async function createEmbed(msg: Message<boolean>, guildMember: GuildMember | null,  dirtyUrls: string[], cleanedUrls: CleanedUrlData[]) {
     const embed = new EmbedBuilder()
         .setTitle(`Cleaned URLs`)
         .setColor(guildMember?.displayColor ?? `#8034EB`)
